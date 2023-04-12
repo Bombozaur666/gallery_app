@@ -1,0 +1,24 @@
+version: '3.9'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: dockerfiles/server.dockerfile
+    volumes:
+      - ./src:/usr/src/app:rw
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - ./env/server.env
+      - ./env/db.env
+    container_name: gallery-app-django
+  db:
+    image: postgres:15.1-alpine
+    restart: always
+    env_file:
+      - ./env/db.env
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    container_name: gallery-app-postgres
